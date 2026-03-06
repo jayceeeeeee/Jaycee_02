@@ -6,7 +6,7 @@ let humanLon = 0;
 
 //measures of the universe
 let pi = 3.142857;
-let earthRadius = 4536; // in miles
+let earthRadiusMiles = 4536; // in miles
 
 //creating the canvas and getting the geolocation of the user
 function setup() {
@@ -21,23 +21,32 @@ function setup() {
   }
 }
 
+//conversion function from miles to pixels
+function conversionMilesToPixels(miles) {
+  let earthRadiusPixels = 250; // We choose the raius of the Earth as a frame of reference for any conversion.
+  return miles * earthRadiusPixels / earthRadiusMiles;
+}
+
 //starting to draw
 function draw() {
-  //initiating the canvas
+  /* 
+    Initiating the canvas 
+  */
   background(0);
   translate(width/2, height/2);
 
   stroke(255);
   noFill();
 
-  // Terre
+  /*
+    Draw the circle of the Earth
+  */
+  let earthRadius = conversionMilesToPixels(earthRadiusMiles);
   circle(0, 0, earthRadius * 2);
 
-  // Conversion longitude → angle
-  let angle = map(humanLon, -180, 180, -PI, PI);
+  let angle = map(humanLon, -180, 180, -PI, PI); // Conversion longitude → angle
 
-  // Conversion latitude → distance
-  let distance = map(humanLat, -90, 90, earthRadius, 0);
+  let distance = map(humanLat, -90, 90, earthRadius, 0);  // Conversion latitude → distance
 
   let x = cos(angle) * distance;
   let y = sin(angle) * distance;
@@ -46,7 +55,15 @@ function draw() {
   noStroke();
   circle(x, y, 12);
 
-  // Centre = toi
+  /*
+    Drawing the (lat, lon) grid around the Human
+  */
+
+  
+
+  /*
+    Center the Human
+  */
   fill(255);
-  circle(0, 0, 8);
+  circle(humanX, humanY, 8); // (0,0) because the human is the center of the canvas
 }
