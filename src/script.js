@@ -5,16 +5,15 @@ let humanLat = 0;
 let humanLon = 0;
 
 //measures of the universe
-let pi = 3.142857;
+let pi = Math.PI;
 let earthRadiusMiles = 4536; // in miles
 
-//creating the canvas and getting the geolocation of the user
 function setup() {
   createCanvas(window.innerWidth, window.innerHeight);
   angleMode(RADIANS);
 
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(position => {
+    navigator.geolocation.getCurrentPosition((position) => {
       humanLat = position.coords.latitude;
       humanLon = position.coords.longitude;
     });
@@ -23,36 +22,39 @@ function setup() {
 
 //conversion function from miles to pixels
 function conversionMilesToPixels(miles) {
-  let earthRadiusPixels = 250; // We choose the raius of the Earth as a frame of reference for any conversion.
-  return miles * earthRadiusPixels / earthRadiusMiles;
+  let earthRadiusPixels = 250; // frame of reference
+  return (miles * earthRadiusPixels) / earthRadiusMiles;
 }
 
-//starting to draw
 function draw() {
-  /* 
-    Initiating the canvas 
-  */
   background(0);
-  translate(width/2, height/2);
+  translate(width / 2, height / 2);
 
-  stroke(255);
+  stroke(255, 100);
+  strokeWeight(1);
   noFill();
 
-  /*
-    Draw the circle of the Earth
-  */
+  // Draw the circle of the Earth
   let earthRadius = conversionMilesToPixels(earthRadiusMiles);
   circle(0, 0, earthRadius * 2);
 
-  /*
-    Drawing the (lat, lon) grid around the Human
-  */
+  // --------- Grille carrée à l'intérieur du cercle ---------
+  let step = 50; // distance entre les lignes
 
-  
+  // lignes verticales
+  for (let x = -earthRadius; x <= earthRadius; x += step) {
+    let yLimit = sqrt(earthRadius * earthRadius - x * x); // borne du cercle
+    line(x, -yLimit, x, yLimit);
+  }
 
-  /*
-    Center the Human
-  */
-  fill(255);
-  circle(humanX, humanY, 8); // (0,0) because the human is the center of the canvas
+  // lignes horizontales
+  for (let y = -earthRadius; y <= earthRadius; y += step) {
+    let xLimit = sqrt(earthRadius * earthRadius - y * y); // borne du cercle
+    line(-xLimit, y, xLimit, y);
+  }
+
+  // Center the Human
+  fill(255, 0, 0);
+  noStroke();
+  circle(humanX, humanY, 8); // humain au centre
 }
