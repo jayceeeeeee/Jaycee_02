@@ -23,7 +23,7 @@ export function updateRadiusTerritory() {
     // Responsive calculation with proportional adjustment
     // We want the radius to be max 40% of the smallest window dimension
     const minDimension = Math.min(window.innerWidth, window.innerHeight);
-    const maxRadiusAllowed = minDimension * 0.35;
+    const maxRadiusAllowed = minDimension * 0.25;
     
     RyōikiTenkaiPixels = maxRadiusAllowed;
 }
